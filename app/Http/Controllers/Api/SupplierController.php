@@ -49,10 +49,12 @@ class SupplierController extends Controller
             $request->validated(),
         );
 
-        return response()->json([
-            "message" => "Supplier created successfully",
-            "data" => new SupplierResource($supplier),
-        ]);
+        return response()
+            ->json([
+                "message" => "Supplier created successfully",
+                "data" => new SupplierResource($supplier),
+            ])
+            ->setStatusCode(201);
     }
 
     public function update(

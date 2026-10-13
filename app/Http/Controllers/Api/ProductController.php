@@ -47,10 +47,12 @@ class ProductController extends Controller
     {
         $product = $this->ProductService->createProduct($request->validated());
 
-        return response()->json([
-            "message" => "Product created successfully",
-            "data" => new ProductResource($product),
-        ]);
+        return response()
+            ->json([
+                "message" => "Product created successfully",
+                "data" => new ProductResource($product),
+            ])
+            ->setStatusCode(201);
     }
 
     public function update(

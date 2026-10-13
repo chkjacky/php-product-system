@@ -49,10 +49,12 @@ class CategoryController extends Controller
             $request->validated(),
         );
 
-        return response()->json([
-            "message" => "Category created successfully",
-            "data" => new CategoryResource($category),
-        ]);
+        return response()
+            ->json([
+                "message" => "Category created successfully",
+                "data" => new CategoryResource($category),
+            ])
+            ->setStatusCode(201);
     }
 
     public function update(
