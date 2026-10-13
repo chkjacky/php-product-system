@@ -42,15 +42,15 @@ php artisan test
 
 ## Useful Commands
 
-| Command | Description |
-|---------|-------------|
-| `composer run dev` | Start dev server with all services |
-| `php artisan migrate` | Run database migrations |
-| `php artisan migrate:fresh --seed` | Reset DB and reseed |
-| `php artisan db:seed` | Seed the database |
-| `php artisan test` | Run the test suite |
-| `npm run build` | Build frontend assets |
-| `npm run dev` | Start Vite dev server |
+| Command                            | Description                        |
+| ---------------------------------- | ---------------------------------- |
+| `composer run dev`                 | Start dev server with all services |
+| `php artisan migrate`              | Run database migrations            |
+| `php artisan migrate:fresh --seed` | Reset DB and reseed                |
+| `php artisan db:seed`              | Seed the database                  | npm run check -- --fix |
+| `php artisan test`                 | Run the test suite                 |
+| `npm run build`                    | Build frontend assets              |
+| `npm run dev`                      | Start Vite dev server              |
 
 ## License
 
