@@ -27,6 +27,10 @@ class Product extends Model
         "price" => "decimal:2",
     ];
 
+    protected $attributes = [
+        "status" => "available",
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

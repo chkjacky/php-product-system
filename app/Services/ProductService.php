@@ -3,15 +3,29 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
-    public function getAllProducts()
+    public function getAllProducts(array $filters = []): CursorPaginator
     {
-        return Product::all();
+        $query = Product::query();
+
+        if (!empty($filters["search"])) {
+            $query->where("name", "like", "%" . $filters["search"] . "%");
+        }
+
+        $sort = $filters["sort"] ?? "id";
+        $order = $filters["order"] ?? "asc";
+        $query->orderBy($sort, $order);
+
+        $perPage = $filters["per_page"] ?? 15;
+
+        return $query->cursorPaginate($perPage);
     }
 
-    public function getProductById(int $id)
+    public function getProductById(string $id)
     {
         return Product::findOrFail($id);
     }
@@ -21,15 +35,15 @@ class ProductService
         return Product::create($data);
     }
 
-    public function updateProduct(int $id, array $data): Product
+    public function updateProduct(Product $product, array $data): Product
     {
-        $Product = Product::findOrFail($id);
-        $Product->update($data);
-        return $Product;
+        $result = $product->update($data);
+
+        return $product->fresh();
     }
 
-    public function deleteProduct(int $id): bool
+    public function deleteProduct(Product $product): bool
     {
-        return Product::findOrFail($id)->delete();
+        return $product->delete();
     }
 }
