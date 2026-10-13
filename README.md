@@ -12,7 +12,7 @@ A Laravel-based REST API application with authentication, database seeding, and 
 ## Spin Up
 
 ```bash
-Create .env file 
+Create .env file
 COPY .env.example and then paste into .env file
 
 - composer install
