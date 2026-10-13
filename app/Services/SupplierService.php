@@ -31,13 +31,13 @@ class SupplierService
         */
         $query = Supplier::query()
             ->when(
-                !empty($filters["search"]),
-                fn($q) => $q->search($filters["search"]),
+                ! empty($filters["search"]),
+                fn ($q) => $q->search($filters["search"]),
             )
             ->when(
                 array_key_exists("is_active", $filters) &&
                     $filters["is_active"] !== null,
-                fn($q) => $q->where(
+                fn ($q) => $q->where(
                     "is_active",
                     filter_var($filters["is_active"], FILTER_VALIDATE_BOOLEAN),
                 ),
@@ -78,8 +78,7 @@ class SupplierService
     {
         if ($supplier->products()->exists()) {
             throw ValidationException::withMessages([
-                "supplier" =>
-                    "This supplier cannot be deleted because it has products.",
+                "supplier" => "This supplier cannot be deleted because it has products.",
             ]);
         }
 

@@ -12,8 +12,8 @@ class CategoryService
     {
         $query = Category::query();
 
-        if (!empty($filters["search"])) {
-            $query->where("name", "like", "%" . $filters["search"] . "%");
+        if (! empty($filters["search"])) {
+            $query->where("name", "like", "%".$filters["search"]."%");
         }
 
         $sort = $filters["sort"] ?? "id";
@@ -42,6 +42,7 @@ class CategoryService
             if ($existing->trashed()) {
                 $existing->restore();
                 $existing->fill($data)->save();
+
                 return $existing;
             }
 
@@ -64,8 +65,7 @@ class CategoryService
     {
         if ($category->products()->exists()) {
             throw ValidationException::withMessages([
-                "category" =>
-                    "This category cannot be deleted because it has products.",
+                "category" => "This category cannot be deleted because it has products.",
             ]);
         }
 

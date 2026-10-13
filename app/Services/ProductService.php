@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\CursorPaginator;
-use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
@@ -12,8 +11,8 @@ class ProductService
     {
         $query = Product::query();
 
-        if (!empty($filters["search"])) {
-            $query->where("name", "like", "%" . $filters["search"] . "%");
+        if (! empty($filters["search"])) {
+            $query->where("name", "like", "%".$filters["search"]."%");
         }
 
         $sort = $filters["sort"] ?? "id";

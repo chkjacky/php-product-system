@@ -9,7 +9,6 @@ use App\Http\Requests\Suppliers\UpdateSupplierRequest;
 use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
 use App\Services\SupplierService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class SupplierController extends Controller
