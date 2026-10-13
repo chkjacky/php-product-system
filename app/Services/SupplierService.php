@@ -3,33 +3,65 @@
 namespace App\Services;
 
 use App\Models\Supplier;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Validation\ValidationException;
 
 class SupplierService
 {
-    public function getAllSuppliers()
+    public function getAllSuppliers(array $filters = []): CursorPaginator
     {
-        return Supplier::all();
+        $query = Supplier::query();
+
+        if (!empty($filters["search"])) {
+            $query->where("name", "like", "%" . $filters["search"] . "%");
+        }
+
+        $sort = $filters["sort"] ?? "id";
+        $order = $filters["order"] ?? "asc";
+        $query->orderBy($sort, $order);
+
+        $perPage = $filters["per_page"] ?? 15;
+
+        return $query->cursorPaginate($perPage);
     }
 
-    public function getSupplierById(int $id)
+    public function getSupplierById(string $id)
     {
         return Supplier::findOrFail($id);
     }
 
     public function createSupplier(array $data): Supplier
     {
-        return Supplier::create($data);
+        $existing = Supplier::withTrashed()
+            ->where("email", $data["email"])
+            ->first();
+
+        if ($existing && $existing->trashed()) {
+            $existing->restore();
+            $existing->update($data);
+
+            return $existing;
+        } else {
+            return Supplier::create($data);
+        }
     }
 
-    public function updateSupplier(int $id, array $data): Supplier
+    public function updateSupplier(Supplier $supplier, array $data): Supplier
     {
-        $Supplier = Supplier::findOrFail($id);
-        $Supplier->update($data);
-        return $Supplier;
+        $result = $supplier->update($data);
+
+        return $supplier->fresh();
     }
 
-    public function deleteSupplier(int $id): bool
+    public function deleteSupplier(Supplier $supplier): bool
     {
-        return Supplier::findOrFail($id)->delete();
+        if ($supplier->products()->exists()) {
+            throw ValidationException::withMessages([
+                "supplier" =>
+                    "This supplier cannot be deleted because it has products.",
+            ]);
+        }
+
+        return $supplier->delete();
     }
 }

@@ -9,11 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Supplier extends Model
 {
-    use HasUuids;
-    use SoftDeletes;
+    use HasUuids, SoftDeletes;
 
-    protected $fillable = ["name", "email", "is_active", "password"];
-    protected $hidden = ["password", "deleted_at"];
+    protected $fillable = ["name", "email", "is_active"];
+
+    protected $attributes = [
+        "is_active" => true,
+    ];
+
+    protected $hidden = ["deleted_at"];
 
     public function products(): HasMany
     {
