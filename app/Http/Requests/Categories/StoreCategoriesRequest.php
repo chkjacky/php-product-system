@@ -28,6 +28,7 @@ class StoreCategoriesRequest extends FormRequest
                 "required",
                 "string",
                 "max:255",
+                Rule::unique("categories", "name")->whereNull("deleted_at"),
             ],
         ];
     }

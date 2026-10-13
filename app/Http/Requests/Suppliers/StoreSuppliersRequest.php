@@ -26,7 +26,12 @@ class StoreSuppliersRequest extends FormRequest
         return [
             "name" => ["required", "string", "max:255"],
             "website" => ["sometimes", "required", "string", "max:255"],
-            "email" => ["required", "string", "max:255"],
+            "email" => [
+                "required",
+                "string",
+                "max:255",
+                Rule::unique("suppliers", "email")->whereNull("deleted_at"),
+            ],
         ];
     }
 }

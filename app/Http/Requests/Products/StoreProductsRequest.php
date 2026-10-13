@@ -25,8 +25,9 @@ class StoreProductsRequest extends FormRequest
     {
         return [
             "name" => ["required", "string", "max:255"],
-            "stock_quantity" => ["required", "integer", "max:10000"],
+            "stock_quantity" => ["required", "integer", "min:0", "max:10000"],
             "price" => ["required", "numeric", "decimal:2", "min:0"],
+            "status" => ["required", "in:available,unavailable,out_of_stock"],
             "category_id" => [
                 "required",
                 "string",
