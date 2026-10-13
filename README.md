@@ -12,12 +12,17 @@ A Laravel-based REST API application with authentication, database seeding, and 
 ## Spin Up
 
 ```bash
+Create .env file 
+COPY .env.example and then paste into .env file
+
 - composer install
 - npm install && npm run build
-- composer run dev
 
 - php artisan migrate
 - php artisan db:seed
+- php artisan key:generate
+
+- composer run dev
 ```
 
 The app will be available at: http://localhost:8000
