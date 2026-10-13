@@ -30,6 +30,7 @@ class GetSuppliersRequest extends FormRequest
             "search" => ["sometimes", "string", "max:255"],
             "sort" => ["sometimes", "string", "in:id,name,created_at"],
             "order" => ["sometimes", "string", "in:asc,desc"],
+            "is_active" => ["sometimes", "boolean"],
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,5 +24,22 @@ class Supplier extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where("is_active", true);
+    }
+
+    protected function name(): Attribute
+    {
+        return Attribute::make(get: fn(string $value) => ucwords($value));
+    }
+
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            set: fn(string $value) => strtolower(trim($value)),
+        );
     }
 }

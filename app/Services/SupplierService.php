@@ -16,6 +16,10 @@ class SupplierService
             $query->where("name", "like", "%" . $filters["search"] . "%");
         }
 
+        if (!empty($filters["is_active"])) {
+            $query->active();
+        }
+
         $sort = $filters["sort"] ?? "id";
         $order = $filters["order"] ?? "asc";
         $query->orderBy($sort, $order);
