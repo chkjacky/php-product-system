@@ -10,6 +10,7 @@ class SupplierService
 {
     public function getAllSuppliers(array $filters = []): CursorPaginator
     {
+        /*
         $query = Supplier::query();
 
         if (!empty($filters["search"])) {
@@ -27,6 +28,22 @@ class SupplierService
         $perPage = $filters["per_page"] ?? 15;
 
         return $query->cursorPaginate($perPage);
+        */
+        $query = Supplier::query()
+            ->when(
+                !empty($filters["search"]),
+                fn($q) => $q->search($filters["search"]),
+            )
+            ->when(
+                array_key_exists("is_active", $filters) &&
+                    $filters["is_active"] !== null,
+                fn($q) => $q->where(
+                    "is_active",
+                    filter_var($filters["is_active"], FILTER_VALIDATE_BOOLEAN),
+                ),
+            );
+
+        return $query->cursorPaginate(15);
     }
 
     public function getSupplierById(string $id)

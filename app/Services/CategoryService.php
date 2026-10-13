@@ -32,6 +32,24 @@ class CategoryService
 
     public function createCategory(array $data): Category
     {
+        // return Category::create($data);
+
+        $existing = Category::withTrashed()
+            ->where("name", $data["name"])
+            ->first();
+
+        if ($existing) {
+            if ($existing->trashed()) {
+                $existing->restore();
+                $existing->fill($data)->save();
+                return $existing;
+            }
+
+            throw ValidationException::withMessages([
+                "name" => "A category with this name already exists.",
+            ]);
+        }
+
         return Category::create($data);
     }
 
