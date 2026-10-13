@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetCategoriesRequest;
-use App\Http\Requests\StoreCategoriesRequest;
-use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Requests\Categories\GetCategoriesRequest;
+use App\Http\Requests\Categories\StoreCategoriesRequest;
+use App\Http\Requests\Categories\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
