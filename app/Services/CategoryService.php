@@ -3,15 +3,29 @@
 namespace App\Services;
 
 use App\Models\Category;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Validation\ValidationException;
 
 class CategoryService
 {
-    public function getAllCategories()
+    public function getAllCategories(array $filters = []): CursorPaginator
     {
-        return Category::all();
+        $query = Category::query();
+
+        if (!empty($filters["search"])) {
+            $query->where("name", "like", "%" . $filters["search"] . "%");
+        }
+
+        $sort = $filters["sort"] ?? "id";
+        $order = $filters["order"] ?? "asc";
+        $query->orderBy($sort, $order);
+
+        $perPage = $filters["per_page"] ?? 15;
+
+        return $query->cursorPaginate($perPage);
     }
 
-    public function getCategoryById(int $id)
+    public function getCategoryById(string $id)
     {
         return Category::findOrFail($id);
     }
@@ -21,15 +35,22 @@ class CategoryService
         return Category::create($data);
     }
 
-    public function updateCategory(int $id, array $data): Category
+    public function updateCategory(Category $category, array $data): Category
     {
-        $Category = Category::findOrFail($id);
-        $Category->update($data);
-        return $Category;
+        $result = $category->update($data);
+
+        return $category->fresh();
     }
 
-    public function deleteCategory(int $id): bool
+    public function deleteCategory(Category $category): bool
     {
-        return Category::findOrFail($id)->delete();
+        if ($category->products()->exists()) {
+            throw ValidationException::withMessages([
+                "category" =>
+                    "This category cannot be deleted because it has products.",
+            ]);
+        }
+
+        return $category->delete();
     }
 }
